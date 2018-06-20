@@ -1,0 +1,40 @@
+{% extends 'recipeBox/base.html' %}{% block recipe_active %}active{% endblock %} {% block body %}
+<div class='recipes-container container-fluid'>
+
+    <!-- Recipes -->
+    <div class='row'>
+        {% if recipes %} {% for recipe in recipes %}
+        <div class="col-sm-2 col-lg-4">
+            <div class="thumbnail" style="background-color:oldlace">
+                <div class="caption">
+                    <h3>{{ recipe.name }}</h3>
+                    <h4>Prep time: {{ recipe.prep_time }}</h4>
+                    <h4>Cook time: {{ recipe.cook_time }}</h4>
+
+                    <!-- Details -->
+                    <a href="{% url 'recipeBox:detail' recipe.id %}">View details</a>
+
+                    <!-- Delete -->
+                    <form action="{% url 'recipeBox:delete_recipe' recipe.id %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+                        <button type="submit" class="btn btn-default btn-sm pull-right">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+
+                    <!-- Favorite Recipe -->
+                    <a href="{% url 'recipeBox:favorite' recipe.id %}" class="btn btn-default btn-sm btn-favorite pull-right" role="button">
+                        <span class="{% if recipe.is_favorite %} glyphicon glyphicon-star {% else %} glyphicon glyphicon-star-empty {% endif %}"></span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %} {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

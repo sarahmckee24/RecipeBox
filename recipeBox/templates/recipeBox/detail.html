@@ -1,0 +1,53 @@
+{% extends 'recipeBox/base.html' %} {% block title %}{{ recipe.name }} Details{% endblock %} {% block body %}
+
+<body>
+    <div class='container-fluid'>
+        <div class='row'>
+            <div class="col-md-6 panel" style='background-color:oldlace'>
+                <h1> {{ recipe.name }}</h1>
+                <h3>Ingredients
+                    <!-- Add Ingredient -->
+                    <form action="{% url 'recipeBox:create_ingredients' recipe.id %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+                        <button type="submit" class="btn btn-success btn-sm" style="display: inline;">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Ingredient
+                    </button>
+                    </form>
+                </h3>
+                <ul>
+                    <!-- List Ingredients -->
+                    {% for ingredients in recipe.ingredients_set.all %}
+                    <form action="{% url 'recipeBox:edit_ingredients' recipe.id ingredients.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}"/>
+                        <input type="hidden" name="ingredients_id" value="{{ ingredients.id }}"/>
+                        <li:before>
+                            <button type="submit" class="btn btn-xs" style="border: 1px solid black"> <span class="glyphicon glyphicon-pencil"></span> </button> {{ingredients.name}} - {{ingredients.measurement}}
+                        </li:before>
+                        </form>
+                    {% endfor %}
+                </ul>
+
+                <h3>Steps
+                    <!-- Add Step -->
+                    <form action="{% url 'recipeBox:create_steps' recipe.id %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}" />
+                        <button type="submit" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Add Step
+                    </button>
+                    </form>
+                </h3>
+                <ol>
+                    <!-- List Steps -->
+                    {% for steps in recipe.steps_set.all %}
+                    <li>{{steps.step_info}} </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+{% endblock %}
