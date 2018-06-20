@@ -1,15 +1,17 @@
 import os
+from decouple import config, Csv
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*&2cey#=irjs!hym)0kq_87zyb03kru7e+3#f*0oc!79@bde%@'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 
 # Application definition
@@ -30,6 +32,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'recipe.urls'
@@ -57,7 +61,7 @@ WSGI_APPLICATION = 'recipe.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': config('DB_NAME'),
     }
 }
 
@@ -75,9 +79,11 @@ USE_TZ = True
 
 
 # Static files (CSS, Images)
+STATIC_ROOT = os.path.join(BASE_DIR, 'recipeBox/static')
 STATIC_URL = '/static/'
 
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, "recipeBox"),
-#    '/static/',
-#]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'recipeBox/static'),
+]
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
