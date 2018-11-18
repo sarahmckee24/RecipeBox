@@ -15,7 +15,7 @@
                     </button>
                     </form>
                 </h3>
-                <ul>
+                <ul class="list_ingredients">
                     <!-- List Ingredients -->
                     {% for ingredients in recipe.ingredients_set.all %}
                     <form action="{% url 'recipeBox:edit_ingredients' recipe.id ingredients.id %}" method="POST">

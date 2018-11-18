@@ -11,7 +11,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -60,8 +60,12 @@ WSGI_APPLICATION = 'recipe.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': config('DB_NAME'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'recipe_db',
+        'USER': 'master',
+        'PASSWORD': 'master',
+        'HOST': ALLOWED_HOSTS[0],
+        'PORT': '5432'
     }
 }
 
@@ -83,7 +87,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'recipeBox/static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'recipeBox/static'),
+    os.path.join(BASE_DIR, 'recipeBox'),
 ]
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
